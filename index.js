@@ -96,5 +96,5 @@ async function crawl(url, profundidade = 0) {
 }
 
 app.listen(port, () => { 
-    console.log(`Server esta no https://localhost:${port}`)
+    console.log(`Server esta no http://localhost:${port}`)
 });
