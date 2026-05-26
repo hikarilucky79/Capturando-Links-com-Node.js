@@ -5,6 +5,11 @@ const app = express()
 const port = 3000
 const url = 'https://books.toscrape.com'
 const domain = 'books.toscrape.com'
+const visitados = new Set();
+const todosLinks = new Set();
+const LIMITE_PAGINAS = 5;
+
+
 
 
 app.use('/', (req, res) => {
@@ -63,6 +68,31 @@ function normalizar(link, url) {
         return [...urlCompleta];
     });
     console.log(normalizar(classificarLinks));
+}
+
+async function crawl(url, profundidade = 0) {
+    if (visitados.size >= LIMITE_PAGINAS || visitados.has(url)) {
+        return;
+    }
+    visitados.add(url);
+
+    buscarhtml(url).then(html => {
+        const links = extrairlinks(html);
+        const classificados = classificarLinks(links, domain);
+        const normalizados = classificados.map(link => normalizar(link, url));
+        if (profundidade < 1) {
+            crawl(normalizados, profundidade + 1);
+        };
+        const uniqueLinks = new Set(normalizados);
+        uniqueLinks.forEach(link => todosLinks.add(link));
+        return uniqueLinks;
+        
+        crawl('https://books.toscrape.com').then(() => {
+            console.log(`\nTotal de links únicos: ${todosLinks.size}`);
+            console.log(`Páginas visitadas: ${visitados.size}`);
+        });
+    });
+
 }
 
 app.listen(port, () => { 
