@@ -51,8 +51,13 @@ function classificarLinks(links, dominio) {
     });
 }
 
-
-
+function normalizar(link, url) {
+    return new URL(link, url).hostname === domain;
+    filtrarlinks(links, domain).forEach(link => {
+        const urlCompleta = new Set(URL(link, url).href);
+        console.log(urlCompleta);
+    });
+}
 
 app.listen(port, () => { 
     console.log(`Server esta no https://localhost:${port}`)
