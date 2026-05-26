@@ -19,17 +19,19 @@ function buscarLivros(url) {
             });
             res.on('end', () => {
                 console.log(html);
+                resolve(html);
             });
+            
         });
     });
 }
 
-functionextrairlinks(html) {
+function extrairlinks(html) {
     const regex = /<a href="(.*?)"/g;
     const matches = [...html.matchAll(regex)];
     const links = matches.map(match => match[1]);
     return links;
-}
+};
 
 // 1. O que acontece se a URL usar HTTP em vez de HTTPS? O mesmo módulo funciona?
 // R: O módulo 'https' é específico para URLs que usam o protocolo HTTPS. Se a URL usar HTTP, o módulo 'https' não funcionará corretamente e resultará em um erro. Para URLs HTTP, você deve usar o módulo 'http' em vez do 'https'.
