@@ -4,13 +4,15 @@ const https = require('https')
 const app = express()
 const port = 3000
 const url = 'https://books.toscrape.com'
+const domain = 'books.toscrape.com'
+
 
 app.use('/', (req, res) => {
     res.send('Rodando!!')
 })
 
 
-function buscarLivros(url) {
+function buscarhtml(url) {
     return new Promise((resolve, reject) => {
         https.get(url, (res) => {
             let html = '';
@@ -39,7 +41,19 @@ function extrairlinks(html) {
 // 2. Por que o evento 'data' pode ser disparado múltiplas vezes?
 // R: O evento 'data' é disparado sempre que uma parte dos dados da resposta é recebida.
 
+function classificarLinks(links, dominio) {
+    return links.filter(link => link.startsWith('/') || link.includes(dominio));
+    return {interno: [], externo: []};
+    buscarhtml(url).then(html => {
+        const links = extrairlinks(html);
+        const classificados = classificarLinks(links, domain);
+        console.log(classificados);
+    });
+}
 
-app.listen(port, () => {
+
+
+
+app.listen(port, () => { 
     console.log(`Server esta no https://localhost:${port}`)
 });
