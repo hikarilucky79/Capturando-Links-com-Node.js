@@ -54,9 +54,15 @@ function classificarLinks(links, dominio) {
 function normalizar(link, url) {
     return new URL(link, url).hostname === domain;
     filtrarlinks(links, domain).forEach(link => {
-        const urlCompleta = new Set(URL(link, url).href);
-        console.log(urlCompleta);
+        try {
+            const urlCompleta = new Set(URL(link, url).href);
+        }
+        catch (error) {
+            console.error(`Erro ao normalizar o link ${link}:`, error);
+        }
+        return [...urlCompleta];
     });
+    console.log(normalizar(classificarLinks));
 }
 
 app.listen(port, () => { 
